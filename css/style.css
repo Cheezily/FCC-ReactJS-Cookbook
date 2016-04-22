@@ -79,3 +79,74 @@ header {
   float: right;
   margin: 0;
 }
+
+.newItem {
+  box-sizing: border-box;
+  width: 650px;
+  height: 400px;
+  color: black;
+  padding: 30px 30px 30px 30px;
+  border: 3px solid #0ab;
+  overflow-y: scroll;
+}
+
+.newItem:after {
+  clear: both;
+}
+
+.newItem label {
+  display: block;
+  width: 200px;
+  height: 45px;
+  margin: 10px 0 10px 0;
+  float: left;
+}
+
+.newItem input {
+  display: block;
+  width: 350px;
+  height: 30px;
+  border: 3px solid #0ab;
+  border-radius: 3px;
+  display: block;
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.addPlus {
+  display: block;
+  float: right;
+  width: 45px;
+  height: 45px;
+  background: #0ab;
+  border-radius: 50%;
+  font-size: 30px;
+  color: white;
+  text-align: center;
+}
+
+.cancelDish, .submitDish {
+  width: 100px;
+  height: 45px;
+  margin: 30px 0 50px 0;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: block;
+  background: #0ab;
+}
+
+.cancelDish {
+  float: left;
+}
+
+.submitDish {
+  float: right;
+}
+
+.addedToList {
+  display: none;
+}

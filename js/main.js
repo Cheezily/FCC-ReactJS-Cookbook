@@ -13,7 +13,7 @@ if (localStorage['_cheezily_recipes']) {
   localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
 }
 
-
+//grab the first recipe to display
 var firstRecipie = recipes[0];
 console.log('first ' + firstRecipie['name']);
 
@@ -24,6 +24,9 @@ var Dishes = React.createClass({
   },
   render: function() {
 
+    //makes sure there are enough items to display to overfill
+    //the list so the scroll effect is shown. Doing it here prevents the
+    //fake items from being added to the user's local storage
     if (this.props.dishes.length < 7) {
       while (this.props.dishes.length < 7) {
         this.props.dishes.push({"name": "Add Item", "ingredients": []});
@@ -62,3 +65,23 @@ var IngredientList = React.createClass({
 
 ReactDOM.render(<IngredientList dish={firstRecipie}/>, document.getElementById('ingredients'));
 ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
+
+
+$('.addPlus').click(function() {
+
+  var addedInputCount = $('.addedToList').length;
+
+  var html = "<label for='i" + (addedInputCount + 3) + "'>Ingredient " +
+    (addedInputCount + 3) + "</label>" +
+    "<input id='i" + (addedInputCount + 3) + "' class='ingredientInput' type='text' placeholder='Ingredient...'>" +
+    "<div class='clear addedToList'></div>";
+
+  $('.addIngredients').append(html);
+
+  //var newHeight = ((addedInputCount + 1) * 70 + 400) + 'px';
+
+  //console.log(newHeight);
+
+  //$('.newItem').css({height: newHeight});
+
+});
