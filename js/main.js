@@ -1,4 +1,4 @@
-//localStorage.removeItem('_cheezily_recipes');
+localStorage.removeItem('_cheezily_recipes');
 $('input').val('');
 
 if (localStorage['_cheezily_recipes']) {
@@ -9,7 +9,7 @@ if (localStorage['_cheezily_recipes']) {
   var recipes = [
     {"name": "PB&J", "ingredients": ["Bread", "Jam", "Peanut Butter"]},
     {"name": "Salad", "ingredients": ["Spinach", "Croutons", "Cheese", "More Cheese"]},
-    {"name": "Cheeseburger", "ingredients": ["Bun", "Burger Meat", "Cheese", "More Cheese", "Lettuce", "Mayo"]}
+    {"name": "Big Mac", "ingredients": ["Bun", "Horse", "Pickles", "Spiders", "Cheese", "Soap"]}
   ];
   localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
 }
@@ -38,7 +38,7 @@ var Dishes = React.createClass({
 
     for (var i = 0; i < numDishes; i++) {
       outputList.push(this.props.dishes[i] || {"name": "Add Item", "ingredients": []})
-      console.log("PUSHED: " + (this.props.dishes[i]));
+      //console.log("PUSHED: " + (this.props.dishes[i]));
     }
 
     return (
@@ -52,6 +52,7 @@ var Dishes = React.createClass({
   }
 });
 
+
 var IngredientList = React.createClass({
   setInitialState: function() {
     return {}
@@ -60,7 +61,7 @@ var IngredientList = React.createClass({
 
     return (
       <div className='ingredientList'>
-          <h3>{this.props.dish.name}</h3>
+          <h2>{this.props.dish.name}</h2>
           {this.props.dish.ingredients.map(function(item, key) {
             return <li key={key}>{item}</li>
           })}
@@ -69,14 +70,15 @@ var IngredientList = React.createClass({
     }
   });
 
-
-
-
+// first set of information to render
+ReactDOM.render(<IngredientList dish={firstRecipie}/>, document.getElementById('ingredients'));
+ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
+setActive(firstRecipie.name);
 
 
 $('.addPlus').click(function() {
 
-  var addedInputCount = $('.addedToList').length;
+  var addedInputCount = $('.addedToList').length / 2;
 
   var html = "<label class='addedToList' for='i" + (addedInputCount + 3) + "'>Ingredient " +
     (addedInputCount + 3) + "</label>" +
@@ -89,9 +91,15 @@ $('.addPlus').click(function() {
 
 
 $('.cancelDish').click(function() {
-  $('.addedToList').remove();
-  $('.error').text('');
+
+  $(".outputContainer").animate({"opacity": "1"}, 400);
+  $(".newItem").fadeOut(400, function() {
+    $('.addedToList').remove();
+    $('.error').text('');
+    $('input').val('');
+  });
 });
+
 
 $('.submitDish').click(function() {
 
@@ -113,8 +121,19 @@ $('.submitDish').click(function() {
     })
 
     recipes.push(newDish);
+    localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
+
     ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
-    console.log(newDish);
+    ReactDOM.render(<IngredientList dish={newDish}/>, document.getElementById('ingredients'));
+    setActive(newDish.name);
+    console.log(newDish.name);
+
+    $(".outputContainer").animate({"opacity": "1"}, 400);
+    $(".newItem").fadeOut(400, function() {
+      $('.addedToList').remove();
+      $('.error').text('');
+      $('input').val('');
+    });
 
     $('input').val('');
 
@@ -124,13 +143,29 @@ $('.submitDish').click(function() {
 
 $('.dish').click(function() {
   var dishName = $(this).text();
+  console.log("DISH: " + dishName);
   for (var dish in recipes) {
     if (recipes[dish].name == dishName) {
       ReactDOM.render(<IngredientList dish={recipes[dish]}/>, document.getElementById('ingredients'));
+      setActive(recipes[dish].name);
     }
   }
 })
 
-// first set of information to render
-ReactDOM.render(<IngredientList dish={firstRecipie}/>, document.getElementById('ingredients'));
-ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
+
+$('.addNew').click(function() {
+  $(".outputContainer").animate({"opacity": ".3"}, 400);
+  $(".newItem").fadeIn(400);
+})
+
+
+function setActive(dish) {
+
+  $('.active').remove();
+
+  $('.dish').each(function() {
+    if ($(this).text() == dish) {
+      $(this).before('<div class="active"></div>');
+    }
+  })
+}

@@ -19,6 +19,7 @@
 
   <header>freeCodeCamp Cookbook</header>
 
+  <div class='outputContainer'>
   <div class='outputBox'>
     <div class='ingredients' id='ingredients'></div>
     <div class='dishes' id='dishes'></div>
@@ -27,20 +28,19 @@
     <div class='edit'>Edit Recipe</div>
     <div class='addNew'>+ Add New</div>
   </div>
+  </div>
 
   <div class='newItem'>
     <label for='newName'>Dish Name</label>
-    <input id='newName' type='text' placeholder='Dish Name...'><div class='clear'></div>
-    <hr>
+    <input id='newName' type='text' placeholder='Dish Name...'><div class='clear'></div><hr>
     <label for='i1'>Ingredient 1</label>
     <input id='i1' class='ingredientInput' type='text' placeholder="Ingredient..."><div class='clear'></div>
     <label for='i2'>Ingredient 2</label>
-    <input id='i2' class='ingredientInput' type='text' placeholder="Ingredient..."><div class='clear addIngredients'></div>
+    <input id='i2' class='ingredientInput' type='text' placeholder="Ingredient..."><div class='clear'></div>
+    <div class='addIngredients'></div>
     <span class='error'></span><div class='addPlus'>+</div><div class='clear'></div>
     <button class='cancelDish'>Cancel</button>
     <button class='submitDish'>Add Dish!</button><div class='clear'></div>
-
-
   </div>
 
 
