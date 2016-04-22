@@ -13,16 +13,25 @@ if (localStorage['_cheezily_recipes']) {
   localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
 }
 
+
 var firstRecipie = recipes[0];
 console.log('first ' + firstRecipie['name']);
+
 
 var Dishes = React.createClass({
   setInitialState: function() {
     return {}
   },
   render: function() {
+
+    if (this.props.dishes.length < 7) {
+      while (this.props.dishes.length < 7) {
+        this.props.dishes.push({"name": "Add Item", "ingredients": []});
+      }
+    }
+
     return (
-      <div>
+      <div className='recipeList'>
       {this.props.dishes.map(function(dish, key) {
         return <div className='dish' key={key}>{dish.name}</div>
       })}

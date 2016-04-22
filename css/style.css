@@ -51,6 +51,12 @@ header {
     -3px -5px 10px #111;
 }
 
+.recipeList {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 500px;
+}
+
 .options {
   height: 40px;
   width: 900px;
