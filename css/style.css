@@ -113,6 +113,7 @@ header {
 }
 
 .clear {
+  height: 0;
   clear: both;
 }
 
@@ -126,6 +127,15 @@ header {
   font-size: 30px;
   color: white;
   text-align: center;
+  selection: none;
+}
+
+.addPlus::selection {
+  display: none;
+}
+
+.addPlus::-moz-selection {
+  display: none;
 }
 
 .cancelDish, .submitDish {
@@ -134,6 +144,7 @@ header {
   margin: 30px 0 50px 0;
   border: none;
   border-radius: 3px;
+  font-size: 18px;
   color: white;
   display: block;
   background: #0ab;
@@ -149,4 +160,8 @@ header {
 
 .addedToList {
   display: none;
+}
+
+.error {
+  color: red;
 }

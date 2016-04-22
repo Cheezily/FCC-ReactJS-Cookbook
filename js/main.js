@@ -1,4 +1,5 @@
 //localStorage.removeItem('_cheezily_recipes');
+$('input').val('');
 
 if (localStorage['_cheezily_recipes']) {
   console.log('local storage used');
@@ -27,15 +28,22 @@ var Dishes = React.createClass({
     //makes sure there are enough items to display to overfill
     //the list so the scroll effect is shown. Doing it here prevents the
     //fake items from being added to the user's local storage
-    if (this.props.dishes.length < 7) {
-      while (this.props.dishes.length < 7) {
-        this.props.dishes.push({"name": "Add Item", "ingredients": []});
-      }
+    var outputList = [];
+
+    if (outputList.length < 7) {
+      var numDishes = 7;
+    } else {
+      numDishes = outputList.length;
+    }
+
+    for (var i = 0; i < numDishes; i++) {
+      outputList.push(this.props.dishes[i] || {"name": "Add Item", "ingredients": []})
+      console.log("PUSHED: " + (this.props.dishes[i]));
     }
 
     return (
       <div className='recipeList'>
-      {this.props.dishes.map(function(dish, key) {
+      {outputList.map(function(dish, key) {
         return <div className='dish' key={key}>{dish.name}</div>
       })}
       </div>
@@ -63,25 +71,66 @@ var IngredientList = React.createClass({
 
 
 
-ReactDOM.render(<IngredientList dish={firstRecipie}/>, document.getElementById('ingredients'));
-ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
+
 
 
 $('.addPlus').click(function() {
 
   var addedInputCount = $('.addedToList').length;
 
-  var html = "<label for='i" + (addedInputCount + 3) + "'>Ingredient " +
+  var html = "<label class='addedToList' for='i" + (addedInputCount + 3) + "'>Ingredient " +
     (addedInputCount + 3) + "</label>" +
-    "<input id='i" + (addedInputCount + 3) + "' class='ingredientInput' type='text' placeholder='Ingredient...'>" +
-    "<div class='clear addedToList'></div>";
+    "<input id='i" + (addedInputCount + 3) + "' class='ingredientInput addedToList' type='text' placeholder='Ingredient...'>" +
+    "<div class='clear'></div>";
 
   $('.addIngredients').append(html);
 
-  //var newHeight = ((addedInputCount + 1) * 70 + 400) + 'px';
-
-  //console.log(newHeight);
-
-  //$('.newItem').css({height: newHeight});
-
 });
+
+
+$('.cancelDish').click(function() {
+  $('.addedToList').remove();
+  $('.error').text('');
+});
+
+$('.submitDish').click(function() {
+
+  var filledOut = true;
+  $('input').each(function() {
+    if ($(this).val() == '') {
+      filledOut = false;
+      $('.error').text('Please complete all fields');
+    }
+  })
+
+  if (filledOut) {
+    var newDish = {"name": "", "ingredients": []};
+
+    newDish.name = $('#newName').val();
+
+    $('.ingredientInput').each(function() {
+      newDish.ingredients.push($(this).val());
+    })
+
+    recipes.push(newDish);
+    ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
+    console.log(newDish);
+
+    $('input').val('');
+
+  }
+})
+
+
+$('.dish').click(function() {
+  var dishName = $(this).text();
+  for (var dish in recipes) {
+    if (recipes[dish].name == dishName) {
+      ReactDOM.render(<IngredientList dish={recipes[dish]}/>, document.getElementById('ingredients'));
+    }
+  }
+})
+
+// first set of information to render
+ReactDOM.render(<IngredientList dish={firstRecipie}/>, document.getElementById('ingredients'));
+ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
