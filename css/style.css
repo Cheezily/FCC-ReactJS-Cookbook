@@ -98,7 +98,7 @@ header {
   text-align: center;
 }
 
-.newItem {
+.newItem, .editItemContainer {
   box-sizing: border-box;
   display: none;
   position: absolute;
@@ -115,6 +115,17 @@ header {
   overflow-y: scroll;
 }
 
+.editItemContainer {
+  display: block;
+  padding-top: 10px;
+}
+
+
+
+
+
+
+
 .newItem hr {
   color: #0ab;
   height: 2px;
@@ -128,7 +139,7 @@ header {
   float: left;
 }
 
-.newItem input {
+.newItem input, .editItem {
   display: block;
   width: 350px;
   height: 30px;
@@ -146,9 +157,6 @@ header {
 .clear {
   height: 0;
   clear: both;
-}
-
-.addIngredients {
 }
 
 .addPlus {
@@ -172,7 +180,50 @@ header {
   display: none;
 }
 
-.cancelDish, .submitDish {
+.editItemContainer {
+  display: none;
+}
+
+.removeMinus {
+  display: block;
+  float: right;
+  width: 35px;
+  height: 35px;
+  margin-left: 10px;
+  background: #b11;
+  border-radius: 50%;
+  font-size: 28px;
+  color: white;
+  text-align: center;
+  selection: none;
+}
+
+.editLabel, .editItem, .removeMinus {
+  float: left;
+  margin-top: 15px;
+}
+
+.editLabel {
+  margin-top: 20px;
+  margin-right: 5px;
+}
+
+.editAddPlus {
+  display: block;
+  float: right;
+  width: 35px;
+  height: 35px;
+  margin-right: 20px;
+  margin-top: 15px;
+  background: #0ab;
+  border-radius: 50%;
+  font-size: 26px;
+  color: white;
+  text-align: center;
+  selection: none;
+}
+
+.cancelDish, .submitDish, .submitEdit, .cancelEdit {
   width: 100px;
   height: 45px;
   margin: 30px 0 50px 0;
@@ -184,11 +235,11 @@ header {
   background: #0ab;
 }
 
-.cancelDish {
+.cancelDish, .cancelEdit {
   float: left;
 }
 
-.submitDish {
+.submitDish, .submitEdit {
   float: right;
 }
 

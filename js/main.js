@@ -1,4 +1,4 @@
-localStorage.removeItem('_cheezily_recipes');
+//localStorage.removeItem('_cheezily_recipes');
 $('input').val('');
 
 if (localStorage['_cheezily_recipes']) {
@@ -8,15 +8,14 @@ if (localStorage['_cheezily_recipes']) {
   console.log('STORAGE SET');
   var recipes = [
     {"name": "PB&J", "ingredients": ["Bread", "Jam", "Peanut Butter"]},
-    {"name": "Salad", "ingredients": ["Spinach", "Croutons", "Cheese", "More Cheese"]},
-    {"name": "Big Mac", "ingredients": ["Bun", "Horse", "Pickles", "Spiders", "Cheese", "Soap"]}
+    {"name": "Salad", "ingredients": ["Spinach", "Croutons", "Cheese", "Tomatoes"]},
+    {"name": "Big Mac", "ingredients": ["Bun", "Horse meat", "Pickles", "Spiders", "Cheese", "Soap"]}
   ];
   localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
 }
 
 //grab the first recipe to display
-var firstRecipie = recipes[0];
-console.log('first ' + firstRecipie['name']);
+var firstRecipe = recipes[0];
 
 
 var Dishes = React.createClass({
@@ -68,14 +67,55 @@ var IngredientList = React.createClass({
 
       </div>)
     }
-  });
+});
+
+
+var EditList = React.createClass({
+  setInitialState: function() {
+    return {}
+  },
+  render: function() {
+
+    var items = this.props.dish;
+
+    return (
+      <div className='editItemContainer'>
+          <h2>{items.name}</h2>
+          {items.ingredients.map(function(item, key) {
+            var removeID = "-" + item;
+            return (
+              <div>
+              <div className="editLabel">Edit/Remove: </div>
+              <input id="edit{item}" className="editItem" type="text" defaultValue={item} placeholder={item} />
+              <span onClick={removeItem.bind(this, item, items)} className='removeMinus'>-</span>
+              <div className='clear'></div>
+              </div>
+            )
+          })}
+          <span className='error'></span><div onClick={addEditLine.bind(this, items)} className='editAddPlus'>+</div>
+          <div className='clear'></div>
+          <button className='cancelEdit'>Cancel</button>
+          <button onClick={submitEdit.bind(this, items)} className='submitEdit'>Save!</button><div className='clear'></div>
+
+      </div>)
+    }
+});
+
+function clickedFunc(i, props) {
+  console.log("you clicked " + props);
+}
 
 // first set of information to render
-ReactDOM.render(<IngredientList dish={firstRecipie}/>, document.getElementById('ingredients'));
+ReactDOM.render(<IngredientList dish={firstRecipe}/>, document.getElementById('ingredients'));
 ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
-setActive(firstRecipie.name);
+ReactDOM.render(<EditList dish={firstRecipe}/>, document.getElementById('test'));
+setActive(firstRecipe.name);
 
 
+
+//*********************************************
+//*********code for the new dish section*******
+//*********************************************
 $('.addPlus').click(function() {
 
   var addedInputCount = $('.addedToList').length / 2;
@@ -104,7 +144,7 @@ $('.cancelDish').click(function() {
 $('.submitDish').click(function() {
 
   var filledOut = true;
-  $('input').each(function() {
+  $('.newItem input').each(function() {
     if ($(this).val() == '') {
       filledOut = false;
       $('.error').text('Please complete all fields');
@@ -143,7 +183,7 @@ $('.submitDish').click(function() {
 
 $('.dish').click(function() {
   var dishName = $(this).text();
-  console.log("DISH: " + dishName);
+  //console.log("DISH: " + dishName);
   for (var dish in recipes) {
     if (recipes[dish].name == dishName) {
       ReactDOM.render(<IngredientList dish={recipes[dish]}/>, document.getElementById('ingredients'));
@@ -156,6 +196,119 @@ $('.dish').click(function() {
 $('.addNew').click(function() {
   $(".outputContainer").animate({"opacity": ".3"}, 400);
   $(".newItem").fadeIn(400);
+})
+
+
+
+//*********************************************
+//***********code for the edit section*********
+//*********************************************
+function removeItem(item, props) {
+
+  var ingList = [];
+
+  //copy the list
+  for (var i in props.ingredients) {
+    ingList.push(props.ingredients[i]);
+  }
+
+  //remove the passed item from the copied list that will
+  //be passed back into React
+  for (var ingredient in ingList) {
+    if (item == ingList[ingredient]) {
+      ingList.splice(ingredient, 1);
+      break;
+    }
+  }
+
+  var passed = {"name": props.name, "ingredients": ingList};
+  ReactDOM.render(<EditList dish={passed}/>, document.getElementById('test'));
+}
+
+
+function addEditLine(props) {
+  console.log(props);
+
+  var ingList = [];
+
+  //copy the list
+  for (var i in props.ingredients) {
+    ingList.push(props.ingredients[i]);
+  }
+
+  //add blank item
+  if (ingList[ingList.length - 1] != "") {
+    ingList.push("");
+  }
+
+  var passed = {"name": props.name, "ingredients": ingList};
+  ReactDOM.render(<EditList dish={passed}/>, document.getElementById('test'));
+}
+
+
+$('.cancelEdit').click(function() {
+  console.log('CANCEL HIT');
+  $(".outputContainer").animate({"opacity": "1"}, 400);
+  $('.editItemContainer').fadeOut(400, function() {
+    $('.editItem').val('');
+    $('.test').empty();
+  });
+})
+
+
+function submitEdit(props) {
+
+  var ingList = [];
+  var listItems = [];
+  var finalList = [];
+
+  $('.editItemContainer input').each(function() {
+    listItems.push($(this).val());
+  })
+
+  for (var i = 0; i < listItems.length; i++) {
+    if (listItems[i] != "") {
+      finalList.push(listItems[i]);
+    } else {
+      finalList.push(props.ingredients[i]);
+    }
+  }
+
+  var finalObject = {"name": props.name, "ingredients": finalList};
+
+  console.log("finalName: " + finalObject.name);
+  console.log("finalList: " + finalObject.ingredients);
+
+  for (var i = 0; i < recipes.length; i++) {
+    if (finalObject.name == recipes[i].name) {
+      recipes[i] = finalObject;
+    }
+  }
+
+  localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
+
+  ReactDOM.render(<IngredientList dish={finalObject}/>, document.getElementById('ingredients'));
+  setActive(finalObject.name);
+
+  $(".outputContainer").animate({"opacity": "1"}, 400);
+  $(".editItemContainer").fadeOut(400);
+}
+
+
+$('.edit').click(function() {
+  $(".test").empty();
+
+  var currentDish = $('.ingredients h2').text();
+
+  for (var i = 0; i < recipes.length; i++) {
+    if (recipes[i].name == currentDish) {
+      ReactDOM.render(<EditList dish={recipes[i]}/>, document.getElementById('test'));
+    }
+  }
+  $('input').val('');
+
+  $(".outputContainer").animate({"opacity": ".3"}, 400);
+  $(".editItemContainer").fadeIn(400);
 })
 
 
