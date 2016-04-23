@@ -20,7 +20,7 @@ header {
 .outputBox {
   height: 450px;
   width: 900px;
-  margin: 40px auto 0;
+  margin: 40px auto 2px;
 }
 
 .ingredients {
@@ -112,7 +112,7 @@ header {
   padding: 50px 30px 30px 30px;
   background: #fff;
   width: 650px;
-  height: 450px;
+  height: 550px;
   color: black;
   border: 3px solid #0ab;
   overflow-y: scroll;
@@ -122,12 +122,6 @@ header {
   display: block;
   padding-top: 10px;
 }
-
-
-
-
-
-
 
 .newItem hr {
   color: #0ab;
@@ -165,11 +159,12 @@ header {
 .addPlus {
   display: block;
   float: right;
-  width: 45px;
-  height: 45px;
+  margin-bottom: 10px;
+  width: 35px;
+  height: 35px;
   background: #0ab;
   border-radius: 50%;
-  font-size: 30px;
+  font-size: 26px;
   color: white;
   text-align: center;
   selection: none;
