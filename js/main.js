@@ -93,17 +93,14 @@ var EditList = React.createClass({
             )
           })}
           <span className='error'></span><div onClick={addEditLine.bind(this, items)} className='editAddPlus'>+</div>
-          <div className='clear'></div>
+          <div className='clear'></div><hr />
           <button className='cancelEdit'>Cancel</button>
+          <button onClick={deleteRecipe.bind(this, items)} className='delete'>Delete</button>
           <button onClick={submitEdit.bind(this, items)} className='submitEdit'>Save!</button><div className='clear'></div>
-
       </div>)
     }
 });
 
-function clickedFunc(i, props) {
-  console.log("you clicked " + props);
-}
 
 // first set of information to render
 ReactDOM.render(<IngredientList dish={firstRecipe}/>, document.getElementById('ingredients'));
@@ -292,6 +289,27 @@ function submitEdit(props) {
 
   $(".outputContainer").animate({"opacity": "1"}, 400);
   $(".editItemContainer").fadeOut(400);
+}
+
+
+function deleteRecipe(props) {
+
+  for (var dish in recipes) {
+    if (props.name == recipes[dish].name) {
+      recipes.splice(dish, 1);
+    }
+  }
+  
+  localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
+  $(".outputContainer").animate({"opacity": "1"}, 400);
+  $('.editItemContainer').fadeOut(400, function() {
+    $('.editItem').val('');
+    $('.test').empty();
+    ReactDOM.render(<IngredientList dish={firstRecipe}/>, document.getElementById('ingredients'));
+    ReactDOM.render(<Dishes dishes={recipes}/>, document.getElementById('dishes'));
+    ReactDOM.render(<EditList dish={firstRecipe}/>, document.getElementById('test'));
+    setActive(firstRecipe.name);
+  })
 }
 
 
