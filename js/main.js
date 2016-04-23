@@ -84,7 +84,7 @@ var EditList = React.createClass({
           {items.ingredients.map(function(item, key) {
             var removeID = "-" + item;
             return (
-              <div>
+              <div key={key}>
               <div className="editLabel">Edit/Remove: </div>
               <input id="edit{item}" className="editItem" type="text" defaultValue={item} placeholder={item} />
               <span onClick={removeItem.bind(this, item, items)} className='removeMinus'>-</span>
@@ -299,7 +299,7 @@ function deleteRecipe(props) {
       recipes.splice(dish, 1);
     }
   }
-  
+
   localStorage.setItem('_cheezily_recipes', JSON.stringify(recipes));
   $(".outputContainer").animate({"opacity": "1"}, 400);
   $('.editItemContainer').fadeOut(400, function() {
